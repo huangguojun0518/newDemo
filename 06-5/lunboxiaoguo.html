@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .scrollFrame{
+            width: 540px;
+            height: 360px;
+            border:1px solid red;
+            position: relative;
+            overflow: hidden;
+
+        }
+        .scrollContent{
+            position: absolute;
+
+        }
+        .scrollContent img{
+            width: 540px;
+            height: 360px;
+            display: block;
+        }
+        .btns{
+
+            position: absolute;
+            right: 10px;
+            bottom: 0;
+        }
+        .btns li{
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: white;
+            border-radius: 25px;
+            list-style: none;
+        }
+        li.spotlight{
+            background: orange;
+        }
+
+    </style>
+</head>
+<body>
+<div class="scrollFrame">
+    <div class="scrollContent" id="scrollContent">
+        <img src="img/1.jpg" alt="">
+        <img src="img/2.jpg" alt="">
+        <img src="img/3.jpg" alt="">
+        <img src="img/4.jpg" alt="">
+    </div>
+    <ul class="btns">
+        <li class="spotlight"></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+</div>
+
+</body>
+<script type="text/javascript">
+    var imgObj=document.querySelector(".scrollFrame img");
+    var scrollContent=document.querySelector(".scrollContent");
+    var lis=document.querySelectorAll(".btns li");
+    autoPlay(1);
+    function autoPlay(index){
+        timer=setInterval(function () {
+            scrollContent.style.top=-imgObj.offsetHeight*index+"px";
+            for(var i=0;i<lis.length;i++){
+                lis[i].className="";
+            }
+            //为当前的list添加样式
+            lis[index].className="spotlight";
+            index++;
+            if(index==lis.length){
+                index=0;
+            }
+        },3000)
+    }
+
+
+</script>
+</html>

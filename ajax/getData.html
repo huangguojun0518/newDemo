@@ -1,0 +1,33 @@
+<!-- 
+var xhr=new XMLHttpRequest();
+
+属性
+responseText:以字符串的形式接收后台返回的数据
+responseXMML
+readyState:4是交互完成。
+status:200数据成功返回。404，文件未找到。
+
+方法
+open(type,"reg.php");type:post,get,链接后台程序
+send()：向后台程序发送数据
+
+事件
+readystatechange:状态改变事件
+
+
+
+
+ -->
+<script>
+	var xhr=new XMLHttpRequest();
+	//console.log(xhr);
+	xhr.open("post","member.txt");
+	xhr.send(null);
+	xhr.addEventListener("readystatechange",function(){
+		if(xhr.readyState==4){
+			if(xhr.status==200){
+				console.log(xhr.responseText);
+			}
+		}
+	});
+</script>

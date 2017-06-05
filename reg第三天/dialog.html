@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        #demo{
+            stroke-dasharray:250,10;
+            stroke-dashoffset:-180;
+            -webkit-animation: ciranim 3s ease infinite;
+           -webkit-animation-fill-mode:both;
+        }
+        @-webkit-keyframes ciranim {
+
+            0%{
+                stroke-dasharray:0,250;
+                stroke-dashoffset:70;
+            }
+            50%{
+                stroke-dasharray:250,0;
+                stroke-dashoffset:70;
+            }
+            100%{
+                stroke-dasharray:0,250;
+                stroke-dashoffset:-180;
+            }
+
+        }
+    </style>
+</head>
+<body>
+<svg style="width: 300px;height:300px;border: 1px solid red;">
+        <circle id="demo" cx="50%" cy="50%" r="100" style="stroke-width: 3px;fill: none;stroke: red"></circle>
+        <circle  cx="50%" cy="50%" r="100" style="stroke-width: 3px;fill: none;stroke: red ;opacity:0.3"></circle>
+
+<!--g:group群组    -->
+  <!--  <g>
+        <text x="-50" y="0" style="font-family: georgia;font-size: 25px;">Morning
+       <animateMotion path="M20 20 C30 40 130 540 280 30" begin="0s" dur="5s" repeatCount="1" fill="freeze" rotate="auto"></animateMotion>
+        </text>
+        <path d="M20 20 C30 40 130 540 280 30" style="stroke: green;fill:none"></path>
+
+    </g>-->
+</svg>
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="Tools.js"></script>
+
+
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .reg{
+            border: 1px solid #ddd;
+            box-shadow: 0 0 3px #ddd;
+            width: 300px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .reg dt{
+            margin: 5px;
+            font-size: 18px;
+        }
+        .reg input{
+            border: 1px solid #ddd;
+            height: 30px;
+            width: 90%;
+            margin-top: 3px;
+        }
+        .submitBtn{
+            margin-bottom: 3px;
+            background: orangered;
+            color: #fff;
+        }
+        .feedback{
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <dl class="reg">
+        <dt>欢迎注册</dt>
+        <dd class="feedback"></dd>
+        <dd><input type="text" class="username" placeholder="用户名"></dd>
+        <dd><input type="password" class="pwd" placeholder="密码"></dd>
+        <dd><input type="password" class="repwd" placeholder="密码确认"></dd>
+        <dd><input type="text" class="email" placeholder="邮箱"></dd>
+        <dd><input type="button" class="submitBtn" value="提交"></dd>
+        <dd></dd>
+
+
+    </dl>
+
+</body>
+
+<script type="text/javascript">
+    var email=document.querySelector(".email");
+    var pwd=document.querySelector(".pwd");
+    var repwd=document.querySelector(".repwd");
+    var username=document.querySelector(".username");
+    var submitBtn=document.querySelector(".submitBtn");
+    var feedback=document.querySelector(".feedback");
+
+    //变量保存错误信息,为真实值为空,
+    var errorMsg=null;
+    var xhr=new XMLHttpRequest();
+    /*用户名失去焦点*/
+    username.addEventListener("blur",function(){
+        if(trim(this.value).length==0){
+            feedback.innerHTML="用户名不得为空";
+            errorMsg="用户名不得为空";
+        }else{
+            /////////////
+            xhr.open("post","member.txt");
+            xhr.send(null);
+            xhr.addEventListener("readystatechange", function () {
+                if(xhr.readyState==4){
+                    if(xhr.status==200){
+                        //判断用户名是否存在
+                        if(trim(username.value)==xhr.responseText){
+                            feedback.innerHTML="用户名已存在"
+                            errorMsg="用户名已存在";
+                        }else{
+                            errorMsg="";
+                        }
+                       /* console.log(errorMsg);*/
+                    }
+                }
+            })
+        }
+
+    });
+    /*密码*/
+    pwd.addEventListener("keyup",function(){
+       // console.log(valide_pwd(this.value));
+        switch(valide_pwd(this.value)){
+            case 3:
+                feedback.innerHTML="密码强度低";
+                break;
+            case 2:
+                feedback.innerHTML="密码强度中";
+                break;
+            case 1:
+                feedback.innerHTML="密码强度较高";
+                break;
+            case 0:
+                feedback.innerHTML="密码强度高";
+                    feedback.style.color="green";
+                break;
+        };
+        pwd.addEventListener("blur",function(){
+            if(valide_pwd(pwd.value)==0){
+                feedback.innerHTML="";
+            };
+        });
+    });
+    /*密码失去焦点*/
+    pwd.addEventListener("blur",function(){
+        if(this.value.length==0){
+            feedback.innerHTML="密码不得为空";
+            errorMsg="密码不得为空";
+        }else{
+            errorMsg="";
+        }
+    });
+    /*确认密码失去焦点*/
+    repwd.addEventListener("blur",function(){
+        if(this.value.length==0){
+            feedback.innerHTML="请确认密码";
+            errorMsg="请确认密码";
+        }else{
+            errorMsg="";
+        }
+    });
+
+    /*确认密码*/
+    repwd.addEventListener("keyup", function () {
+        if(this.value==pwd.value){
+            feedback.innerHTML=""
+        }else{
+            feedback.innerHTML="两次密码不一致"
+            feedback.style.color="";
+        };
+
+    });
+
+
+    /*邮箱*/
+    email.addEventListener("keyup",function(){
+        if(valide_email(email.value)){
+            feedback.innerHTML=""
+        }else{
+            feedback.innerHTML="<span style='color: red'>邮箱格式不合法</span>"
+            errorMsg="邮箱格式不合法";
+        }
+
+    });
+    /*邮箱失去焦点*/
+    email.addEventListener("blur",function(){
+        if(this.value.length==0){
+            feedback.innerHTML="邮箱不得为空";
+            errorMsg="邮箱不得为空";
+        }/*else{
+            /////////////
+            xhr.open("post","member.txt");
+            xhr.send(null);
+            xhr.addEventListener("readystatechange", function () {
+                if(xhr.readyState==4){
+                    if(xhr.status==200){
+                        //判断用户名是否存在
+                        if(valide_email(email.value)==xhr.responseText){
+                            feedback.innerHTML="邮箱已存在";
+                            errorMsg="邮箱已存在";
+                        }else{
+                            errorMsg="";
+                        }
+                        /!* console.log(errorMsg);*!/
+                    }
+                }
+            })
+        }*/
+
+    });
+
+    /*和提交按钮关联*/
+    submitBtn.addEventListener("click", function () {
+        if(username.value==0||pwd.value==0||repwd.value==0||email.value==0){
+            if(username.value==0){
+                feedback.innerHTML="用户名不得为空";
+            }else if(pwd.value==0){
+                feedback.innerHTML="密码不得为空";
+            }else if(repwd.value==0){
+                feedback.innerHTML="确认密码不得为空";
+            }else if(email.value==0){
+                feedback.innerHTML="邮箱不得为空";
+            }
+        if(errorMsg){
+            feedback.innerHTML=errorMsg;
+            return false;
+        }
+
+        }else{
+            location.href="login.html";
+        }
+
+    });
+
+    /*获得焦点*/
+    username.addEventListener("focus", function () {
+        feedback.innerHTML="";
+    });
+
+</script>
+</html>

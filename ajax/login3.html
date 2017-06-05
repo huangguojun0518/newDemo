@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="Tools.js"></script>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		ul{
+			list-style: none;
+		}
+		.login{
+			border:1px solid #ddd;
+			box-shadow: 0 0 3px #ddd;
+			width:300px;
+			position: absolute;
+			text-align:center;
+			background:#fff;
+			display: none; 
+			transition: left 0.2s;
+		}
+		.login li{
+			/* background: red; */
+
+		}
+		.login li input{
+			border:1px solid #ddd;
+			border-radius:2px;
+			height:30px;
+			margin:15px auto;
+			width:90%;
+		}
+		header{
+			height:60px;
+			line-height:60px;
+			background:green;
+			color:#fff;
+		}
+		header ul{
+			float:right;
+			margin-right:15px;
+		}
+		header ul li{
+			display: inline-block;
+			cursor: pointer;
+		}
+		.regUI{
+			
+		}
+	</style>	
+</head>
+<body>
+	<!-- 登录框开始 -->
+	<ul class="login">
+		<li><input type="text" class="username" placeholder="用户名"></li>
+		<li><input type="password" class="pwd"></li>
+		<li><input type="button" value="登录" class="loginBtn"></li>
+	</ul>
+	<!-- 头部开始 -->
+	<header>
+		<ul class="regUI">
+			<li class="loginBar">登录</li>
+			<li><a href="reg2.html">注册</a></li>
+		</ul>
+		<ul class="member">
+			<li class="membername"></li>
+			<li class="logout">注销</li>
+		</ul>
+	</header>
+	<!-- 头部结束 -->
+	<!-- 登录框结束 -->
+	<script>
+	window.addEventListener("load",function(){
+		var xhr=new XMLHttpRequest();
+		var membername=document.querySelector('.membername');
+		var logout=document.querySelector('.logout');
+		var loginBtn=document.querySelector('.loginBtn');
+		var username=document.querySelector('.username');
+		var login=document.querySelector('.login');
+		var regUI=document.querySelector('.regUI');
+		var member=document.querySelector('.member');
+		var loginBar=document.querySelector('.loginBar');
+		loginBtn.addEventListener("click",function(){
+			xhr.open("post","member.txt");
+			xhr.send(null);
+			xhr.addEventListener("readystatechange",function(){
+				if(xhr.readyState==4){
+					if(xhr.status==200){
+						//登录成功
+						if(username.value==xhr.responseText){
+							console.log("ok");
+							//把值保存在sessionStorage中
+							sessionStorage.setItem("username",username.value);
+							///////模拟登录成功状态,不刷新立即看到结果
+							member.style.display="block";
+							regUI.style.display="none";
+							//把保存的值赋给div,
+							membername.innerHTML=username.value;
+							login.style.display="none";
+							//////////////////////////
+						}else{
+							//登录失败晃动
+							var loginLeft=parseInt(login.style.left);
+							//帧
+							var frames=[
+								//第一帧
+								{left:(loginLeft+15)+"px"},
+								//第二帧
+								{left:(loginLeft-15)+"px"},
+								//最后一帧
+								{left:loginLeft+"px"}
+							];
+							var timing={
+								/*动画持续时间*/
+								duration:150,
+								/*每帧停留时间*/
+								delay:0,
+								/*循环次数：Infinity:无限*/
+								iterations:5,
+								/*方向：alternate*/
+								direction:"normal",
+								/*运动模式：ease加速或减速,linear线性*/
+								easing:'ease-in-out',
+								/*停留在最后一帧,backward停留在第一帧*/
+								fill:'forwards'
+							}
+							login.animate(frames,timing);
+							///////////////////
+						}
+					}
+				}
+			});
+			//alert(username.value);
+		})
+		///////////点击注销/////////////////
+		logout.addEventListener("click",function(){
+			sessionStorage.removeItem("username");
+			//模拟注销状态
+			member.style.display="none";
+			regUI.style.display="block";
+		});
+		//点击出现登录框
+		loginBar.addEventListener("click",function(){
+			login.style.display="block";
+			//center必须在block之后
+			center(login);
+		})
+		//判断用户是否登录
+		if(sessionStorage.getItem("username")){
+			member.style.display="block";
+			regUI.style.display="none";
+			//把保存的值赋给div
+			membername.innerHTML=sessionStorage.getItem("username");
+		}else{
+			member.style.display="none";
+			regUI.style.display="block";
+		}
+
+	});
+		
+	</script>
+</body>
+</html>

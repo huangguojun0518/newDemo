@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="Tools.js"></script>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.reg{
+			width:300px;
+			border:1px solid #ddd;
+			box-shadow:0 0 3px #ddd;
+			margin:150px auto;
+			text-align: center;
+		}
+		.reg dt{
+			margin:5px auto;
+		}
+		.reg input{
+			width:90%;
+			height:25px;
+			margin:5px auto;
+			border:1px solid #ddd;
+		}
+	</style>
+</head>
+<body>
+	<dl class="reg">
+		<dt>欢迎注册</dt>
+		<dd class="feedback"></dd>
+		<dd> <input type="text" class="username"> </dd>
+		<dd><input type="text" class="pwd"></dd>
+		<dd><input type="text" class="repwd"></dd>
+		<dd><input type="text" class="email"></dd>
+		<dd><input type="button" class="regBtn" value="注册"></dd>
+	</dl>
+	<script>
+		var username=document.querySelector(".username");
+		var pwd=document.querySelector(".pwd");
+		var repwd=document.querySelector(".repwd");
+		var email=document.querySelector(".email");
+		var regBtn=document.querySelector(".regBtn");
+		var feedback=document.querySelector(".feedback");
+		var xhr=new XMLHttpRequest();
+		/*保存错误信息*/
+		var errorMsg=null;
+		/*处理密码强度*/
+		pwd.addEventListener("keyup",function(){
+			switch (valide_pwd(trim(this.value))) {
+				case 3:
+					feedback.innerHTML="密码强度低";
+					errorMsg="密码强度低";
+					break;
+				case 2:
+					feedback.innerHTML="密码强度中";
+					errorMsg="密码强度中";
+					break;
+				case 1:
+					feedback.innerHTML="密码强度较高";
+					errorMsg="密码强度较高";
+					break;
+				case 0:
+					feedback.innerHTML="密码强度高";
+					errorMsg="";
+					break;
+				default:
+					// statements_def
+					break;
+			}
+		})
+		//console.log(regBtn);
+		/*用户名失去焦点时的验证*/
+		username.addEventListener("blur",function(){
+			//如果用户名为空
+			if(trim(this.value).length==0){
+				feedback.innerHTML="用户名不得为空";
+				errorMsg="用户名不得为空";
+			}else{
+				//如果用户名不为空，就执行ajax验证
+				xhr.open("post","member.txt");
+				xhr.send(null);
+				xhr.addEventListener("readystatechange",function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200){
+							if(trim(username.value)==xhr.responseText){
+								feedback.innerHTML="用户名已经存在";
+								errorMsg="用户名已经存在";
+							}else{
+								errorMsg="";
+							}
+							//console.log(xhr.responseText);
+						}
+					}
+				})
+				///////////////
+			}
+		});
+		/*用户名获得焦点时的验证*/
+		username.addEventListener("focus",function(){
+			feedback.innerHTML=errorMsg="";
+		})
+		/*点击提交按钮*/
+		regBtn.addEventListener("click",function(){
+			//处理用户名,如果用户名不为空，实际上，点击
+			//提交按钮时也就触发了用户名的失去焦点事件
+			if(trim(username.value).length==0){
+				feedback.innerHTML="用户名不得为空";
+				errorMsg="用户名不得为空";
+			}else{
+				//如果用户名通过，再处理密码
+				if(trim(pwd.value).length==0){
+					//console.log(errorMsg);
+					feedback.innerHTML="密码不得为空";
+					errorMsg="密码不得为空";
+					return false;
+				}else{
+					//处理密码
+					switch (valide_pwd(trim(pwd.value))) {
+						case 3:
+							feedback.innerHTML="密码强度低";
+							errorMsg="密码强度低";
+							break;
+						case 2:
+							feedback.innerHTML="密码强度中";
+							errorMsg="密码强度中";
+							break;
+						case 1:
+							feedback.innerHTML="密码强度较高";
+							errorMsg="密码强度较高";
+							break;
+						case 0:
+							feedback.innerHTML="密码强度高";
+							errorMsg="";
+						default:
+							// statements_def
+							//break;
+					}
+				}
+			}
+			
+			console.log(errorMsg);
+			if(errorMsg){
+				feedback.innerHTML=errorMsg;
+				return false;
+			}
+			console.log(errorMsg);
+			location.href="http://www.baidu.com";
+		})
+	</script>
+</body>
+</html>

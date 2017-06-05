@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="reg.php" method="post">
+    <input type="text" class="username"><br>
+    <input type="text" class="pwd"><br>
+    <input type="submit" value="提交" class="regBtn">
+</form>
+
+</body>
+<script type="text/javascript">
+    var username=document.querySelector(".username");
+    var regBtn=document.querySelector(".regBtn");
+    var pwd=document.querySelector(".pwd");
+    /*点击提交按钮*/
+    regBtn.addEventListener("click", function (evt) {
+        if(username.value.length==0){
+            alert("用户名不得为空");
+            evt.preventDefault(); //阻止默认动作
+            return false;
+        }
+        if(pwd.value.length==0){
+            alert("密码不得为空");
+            evt.preventDefault(); //阻止默认动作
+            return false;
+        }
+
+    })
+</script>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<h1 contenteditable="true">东边日出西边雨</h1>
+	<script>
+		var h1=document.querySelector("h1");
+		//判断sessionstroage中是否有值
+		if(sessionStorage.getItem("poet")){
+			//console.log(sessionStorage.getItem("poet"));
+			h1.innerHTML=sessionStorage.getItem("poet");
+		}
+		/*失去焦点:把h1的值赋给sessionStorage*/
+		h1.addEventListener("blur",function(){
+			//console.log(this.innerHTML);
+			sessionStorage.setItem("poet",this.innerHTML);
+		})
+	</script>
+</body>
+</html>

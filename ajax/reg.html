@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="Tools.js"></script>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		.reg{
+			border:1px solid #ddd;
+			box-shadow: 0 0 3px #ddd;
+			width:300px;
+			margin:50px auto;
+			text-align: center;
+		}
+		.reg dt{
+			margin:5px;
+			font-size:18px;
+		}
+		.reg input{
+			border:1px solid #ddd;
+			height:30px;
+			margin-top:3px;
+			width:90%;
+		}
+		.submitBtn{
+			margin-bottom: 5px;
+			background: green;
+			color:#fff;
+		}
+		.feedback{
+			color:red;
+		}
+	</style>
+</head>
+<body>
+	<dl class="reg">
+		<dt>欢迎注册</dt>
+		<dd class="feedback"></dd>
+		<dd><input type="text" class="username" placeholder="用户名"></dd>
+		<dd><input type="password" placeholder="密码" class="pwd"></dd>
+		<dd><input type="password" placeholder="密码确认" class="repwd"></dd>
+		<dd><input type="text" class="email" placeholder="邮箱"></dd>
+		<dd><input type="button" value="提交" class="submitBtn"></dd>
+	</dl>
+	<script>
+		var username=document.querySelector(".username");
+		var feedback=document.querySelector(".feedback");
+		var submitBtn=document.querySelector(".submitBtn");
+		//变量，保存错误信息，为真时值为空
+		var errorMsg=null;
+		var xhr=new XMLHttpRequest();
+		/*失去焦点*/
+		username.addEventListener("blur",function(){
+			if(trim(this.value).length==0){
+				feedback.innerHTML="用户名不得为空";
+				errorMsg="用户名不得为空";
+			}else{
+				////////////////////
+				xhr.open("post","member.txt");
+				xhr.send(null);
+				xhr.addEventListener("readystatechange",function(){
+					if(xhr.readyState==4){
+						if(xhr.status==200){
+							//判断用户名是否存在
+							if(trim(username.value)==xhr.responseText){
+								feedback.innerHTML="用户名已经存在";
+								errorMsg="用户名已经存在";
+							}else{
+								errorMsg="";
+							}
+						}
+					}
+				})
+			////////////////////
+			}
+			
+		})
+		submitBtn.addEventListener("click",function(){
+			//errorMsg为真时表示有错误
+			if(errorMsg){
+				feedback.innerHTML=errorMsg;
+				return false;
+			}
+			location.href="login.html";
+		});
+		/*获得焦点*/
+		username.addEventListener("focus",function(){
+			feedback.innerHTML="";
+		});
+	</script>
+</body>
+</html>
